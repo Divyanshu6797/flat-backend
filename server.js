@@ -9,11 +9,12 @@ const port = process.env.PORT || 4000
 
 var cors = require('cors')
  
+
 const corsOptions = {
-    origin: ['http://localhost:3000','https://flat-frontend.vercel.app']  // Only allow requests from your frontend origin
-    credentials: true,                // Allow credentials (cookies, authentication)
-    optionsSuccessStatus: 200
-  };
+  origin: ['http://localhost:3000', 'https://flat-frontend.vercel.app'],  // Only allow requests from your frontend origin
+  credentials: true,  // Allow credentials (cookies, authentication)
+  optionsSuccessStatus: 200
+};
 
 app.use(cors(corsOptions));
 app.use(express.json());
