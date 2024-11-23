@@ -116,50 +116,18 @@ const addProperty = async (req, res) => {
   };
 
   const editProperty = async (req, res) => {
+    const { propertyId, updatedProperty } = req.body;
+    
     try {
-      // Extract the updated property data from the request body
-      const updatedProperty = req.body;
-  
-      // Find the property by its ID (or another identifier, like `link`, depending on your use case)
-      const property = await Property.findById(updatedProperty._id);
-  
-      if (!property) {
-        // If the property does not exist, return a 404 error
-        return res.status(404).json({ message: 'Property not found' });
+      const property = await Property.findByIdAndUpdate(propertyId, updatedProperty, { new: true });
+      if (property) {
+        res.status(200).json({ message: 'Property updated successfully', property });
+      } else {
+        res.status(404).json({ message: 'Property not found' });
       }
-  
-      // Update the property details
-      property.link = updatedProperty.link || property.link;
-      property.ownerName = updatedProperty.ownerName || property.ownerName;
-      property.description = updatedProperty.description || property.description;
-      property.rent = updatedProperty.rent || property.rent;
-      property.maintenance = updatedProperty.maintenance || property.maintenance;
-      property.furnishing = updatedProperty.furnishing || property.furnishing;
-      property.deposit = updatedProperty.deposit || property.deposit;
-      property.considering = updatedProperty.considering || property.considering;
-      property.location = updatedProperty.location || property.location;
-      property.distanceBusStop = updatedProperty.distanceBusStop || property.distanceBusStop;
-      property.brokerNo = updatedProperty.brokerNo || property.brokerNo;
-      property.considered = updatedProperty.considered || property.considered;
-      property.visited = updatedProperty.visited || property.visited;
-      property.distanceOracle = updatedProperty.distanceOracle || property.distanceOracle;
-      property.distanceFlipkart = updatedProperty.distanceFlipkart || property.distanceFlipkart;
-      property.comments = updatedProperty.comments || property.comments;
-      property.area = updatedProperty.area || property.area;
-      property.gatedSecurity = updatedProperty.gatedSecurity || property.gatedSecurity;
-  
-      // Save the updated property back to the database
-      const updated = await property.save();
-  
-      // Respond with a success message
-      res.status(200).json({
-        message: 'Property details updated successfully',
-        updatedProperty: updated,
-      });
-    } catch (error) {
-      // Handle errors (e.g., if there is an issue with the database or request)
-      console.error('Error updating property:', error);
-      res.status(500).json({ message: 'Failed to update property details' });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Server Error' });
     }
   };
   
